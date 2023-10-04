@@ -143,17 +143,28 @@ public class PersonaDAO implements CRUD {
 
     @Override
     public boolean edit(Persona per) {
-        if (per != null) {
+        try {
+            String sql = "UPDATE  empleado SET nombre='" + per.getNombre() + "',direccion='" + per.getDireccion() + "',telefono = '"
+                    + per.getTelefono() + "' WHERE clave= '" + per.getClave() + "'";
 
-            try {
-                String sql = "UPDATE  empleado SET nombre='" + per.getNombre() + "',direccion='" + per.getDireccion() + "',telefono = '"
-                        + per.getTelefono() + "' WHERE clave= '" + per.getClave() + "'";
-                con = cn.getConnection();
-                ps = con.prepareStatement(sql);
-                ps.executeUpdate();
-            } catch (SQLException ex) {
-                Logger.getLogger(PersonaDAO.class.getName()).log(Level.SEVERE, null, ex);
-            }
+//            try {
+//                String sql = "UPDATE  empleado SET nombre='" + per.getNombre() + "',direccion='" + per.getDireccion() + "',telefono = '"
+//                        + per.getTelefono() + "' WHERE clave= '" + per.getClave() + "'";
+//                con = cn.getConnection();
+//                ps = con.prepareStatement(sql);
+//                ps.executeUpdate();
+//            } catch (SQLException ex) {
+//                Logger.getLogger(PersonaDAO.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+            con = getConnection();
+            con.setAutoCommit(false);
+            stm = con.createStatement();
+            stm.executeUpdate(sql);
+            con.commit();
+            stm.close();
+            con.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(PersonaDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return false;
     }
@@ -162,10 +173,23 @@ public class PersonaDAO implements CRUD {
     public boolean eliminar(String id) {
         try {
             String sql = "DELETE FROM empleado WHERE clave= '" + id + "'";
-
-            con = cn.getConnection();
-            ps = con.prepareStatement(sql);
-            ps.execute();
+//        try {
+//
+//
+//            con = cn.getConnection();
+//            ps = con.prepareStatement(sql);
+//            ps.execute();
+//        } catch (SQLException ex) {
+//            Logger.getLogger(PersonaDAO.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+            con = getConnection();
+            con.setAutoCommit(false);
+            stm = con.createStatement();
+            stm.executeUpdate(sql);
+            con.commit();
+            stm.close();
+            con.close();
+            
         } catch (SQLException ex) {
             Logger.getLogger(PersonaDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
